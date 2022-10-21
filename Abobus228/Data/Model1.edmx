@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище PodgotovkaEGSModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id_Material" />
+          </Key>
+          <Property Name="Id_Material" Type="int" Nullable="false" />
+          <Property Name="Name_Material" Type="nvarchar" MaxLength="50" />
+          <Property Name="Id_Type" Type="int" Nullable="false" />
+          <Property Name="Count_of_Paskages" Type="int" />
+          <Property Name="Unit" Type="char" MaxLength="10" />
+          <Property Name="Count_in_Stock" Type="int" />
+          <Property Name="Minimum_possible_balance" Type="int" />
+          <Property Name="Price" Type="int" />
+        </EntityType>
+        <EntityType Name="Product_for_Agent">
+          <Key>
+            <PropertyRef Name="IdArticul" />
+          </Key>
+          <Property Name="IdArticul" Type="int" Nullable="false" />
+          <Property Name="Name_Products" Type="nvarchar" MaxLength="50" />
+          <Property Name="Minimum_cost_for_Agent" Type="int" />
+          <Property Name="Image" Type="nvarchar(max)" />
+          <Property Name="Id_TypeProduct" Type="int" Nullable="false" />
+          <Property Name="Number_of_people_for_Production" Type="int" />
+          <Property Name="WorkShop_Number" Type="int" />
+        </EntityType>
+        <EntityType Name="Products_Material">
+          <Key>
+            <PropertyRef Name="IdArticul" />
+            <PropertyRef Name="Id_Material" />
+          </Key>
+          <Property Name="IdArticul" Type="int" Nullable="false" />
+          <Property Name="Id_Material" Type="int" Nullable="false" />
+          <Property Name="Required_amount_of_material" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Type_Material">
+          <Key>
+            <PropertyRef Name="Id_typeMaterial" />
+          </Key>
+          <Property Name="Id_typeMaterial" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TypeProduct">
+          <Key>
+            <PropertyRef Name="Id_Type" />
+          </Key>
+          <Property Name="Id_Type" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Product_for_Agent_TypeProduct">
+          <End Role="TypeProduct" Type="Self.TypeProduct" Multiplicity="1" />
+          <End Role="Product_for_Agent" Type="Self.Product_for_Agent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeProduct">
+              <PropertyRef Name="Id_Type" />
+            </Principal>
+            <Dependent Role="Product_for_Agent">
+              <PropertyRef Name="Id_TypeProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Type_Material">
+          <End Role="Type_Material" Type="Self.Type_Material" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type_Material">
+              <PropertyRef Name="Id_typeMaterial" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Id_Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Material_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Products_Material" Type="Self.Products_Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id_Material" />
+            </Principal>
+            <Dependent Role="Products_Material">
+              <PropertyRef Name="Id_Material" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Material_Product_for_Agent">
+          <End Role="Product_for_Agent" Type="Self.Product_for_Agent" Multiplicity="1" />
+          <End Role="Products_Material" Type="Self.Products_Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_for_Agent">
+              <PropertyRef Name="IdArticul" />
+            </Principal>
+            <Dependent Role="Products_Material">
+              <PropertyRef Name="IdArticul" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище PodgotovkaEGSModelContainer">
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product_for_Agent" EntityType="Self.Product_for_Agent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products_Material" EntityType="Self.Products_Material" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Type_Material" EntityType="Self.Type_Material" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeProduct" EntityType="Self.TypeProduct" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Product_for_Agent_TypeProduct" Association="Self.FK_Product_for_Agent_TypeProduct">
+            <End Role="TypeProduct" EntitySet="TypeProduct" />
+            <End Role="Product_for_Agent" EntitySet="Product_for_Agent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Type_Material" Association="Self.FK_Product_Type_Material">
+            <End Role="Type_Material" EntitySet="Type_Material" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Material_Product" Association="Self.FK_Products_Material_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Products_Material" EntitySet="Products_Material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Material_Product_for_Agent" Association="Self.FK_Products_Material_Product_for_Agent">
+            <End Role="Product_for_Agent" EntitySet="Product_for_Agent" />
+            <End Role="Products_Material" EntitySet="Products_Material" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PodgotovkaEGSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id_Material" />
+          </Key>
+          <Property Name="Id_Material" Type="Int32" Nullable="false" />
+          <Property Name="Name_Material" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Id_Type" Type="Int32" Nullable="false" />
+          <Property Name="Count_of_Paskages" Type="Int32" />
+          <Property Name="Unit" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="Count_in_Stock" Type="Int32" />
+          <Property Name="Minimum_possible_balance" Type="Int32" />
+          <Property Name="Price" Type="Int32" />
+          <NavigationProperty Name="Type_Material" Relationship="Self.FK_Product_Type_Material" FromRole="Product" ToRole="Type_Material" />
+          <NavigationProperty Name="Products_Material" Relationship="Self.FK_Products_Material_Product" FromRole="Product" ToRole="Products_Material" />
+        </EntityType>
+        <EntityType Name="Product_for_Agent">
+          <Key>
+            <PropertyRef Name="IdArticul" />
+          </Key>
+          <Property Name="IdArticul" Type="Int32" Nullable="false" />
+          <Property Name="Name_Products" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Minimum_cost_for_Agent" Type="Int32" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Id_TypeProduct" Type="Int32" Nullable="false" />
+          <Property Name="Number_of_people_for_Production" Type="Int32" />
+          <Property Name="WorkShop_Number" Type="Int32" />
+          <NavigationProperty Name="TypeProduct" Relationship="Self.FK_Product_for_Agent_TypeProduct" FromRole="Product_for_Agent" ToRole="TypeProduct" />
+          <NavigationProperty Name="Products_Material" Relationship="Self.FK_Products_Material_Product_for_Agent" FromRole="Product_for_Agent" ToRole="Products_Material" />
+        </EntityType>
+        <EntityType Name="Products_Material">
+          <Key>
+            <PropertyRef Name="IdArticul" />
+            <PropertyRef Name="Id_Material" />
+          </Key>
+          <Property Name="IdArticul" Type="Int32" Nullable="false" />
+          <Property Name="Id_Material" Type="Int32" Nullable="false" />
+          <Property Name="Required_amount_of_material" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Products_Material_Product" FromRole="Products_Material" ToRole="Product" />
+          <NavigationProperty Name="Product_for_Agent" Relationship="Self.FK_Products_Material_Product_for_Agent" FromRole="Products_Material" ToRole="Product_for_Agent" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Type_Material">
+          <Key>
+            <PropertyRef Name="Id_typeMaterial" />
+          </Key>
+          <Property Name="Id_typeMaterial" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Product_Type_Material" FromRole="Type_Material" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="TypeProduct">
+          <Key>
+            <PropertyRef Name="Id_Type" />
+          </Key>
+          <Property Name="Id_Type" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product_for_Agent" Relationship="Self.FK_Product_for_Agent_TypeProduct" FromRole="TypeProduct" ToRole="Product_for_Agent" />
+        </EntityType>
+        <Association Name="FK_Product_Type_Material">
+          <End Role="Type_Material" Type="Self.Type_Material" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type_Material">
+              <PropertyRef Name="Id_typeMaterial" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Id_Type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Material_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Products_Material" Type="Self.Products_Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="Id_Material" />
+            </Principal>
+            <Dependent Role="Products_Material">
+              <PropertyRef Name="Id_Material" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_for_Agent_TypeProduct">
+          <End Role="TypeProduct" Type="Self.TypeProduct" Multiplicity="1" />
+          <End Role="Product_for_Agent" Type="Self.Product_for_Agent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeProduct">
+              <PropertyRef Name="Id_Type" />
+            </Principal>
+            <Dependent Role="Product_for_Agent">
+              <PropertyRef Name="Id_TypeProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Material_Product_for_Agent">
+          <End Role="Product_for_Agent" Type="Self.Product_for_Agent" Multiplicity="1" />
+          <End Role="Products_Material" Type="Self.Products_Material" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product_for_Agent">
+              <PropertyRef Name="IdArticul" />
+            </Principal>
+            <Dependent Role="Products_Material">
+              <PropertyRef Name="IdArticul" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PodgotovkaEGSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="Product_for_Agent" EntityType="Self.Product_for_Agent" />
+          <EntitySet Name="Products_Material" EntityType="Self.Products_Material" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Type_Material" EntityType="Self.Type_Material" />
+          <EntitySet Name="TypeProduct" EntityType="Self.TypeProduct" />
+          <AssociationSet Name="FK_Product_Type_Material" Association="Self.FK_Product_Type_Material">
+            <End Role="Type_Material" EntitySet="Type_Material" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Material_Product" Association="Self.FK_Products_Material_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Products_Material" EntitySet="Products_Material" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_for_Agent_TypeProduct" Association="Self.FK_Product_for_Agent_TypeProduct">
+            <End Role="TypeProduct" EntitySet="TypeProduct" />
+            <End Role="Product_for_Agent" EntitySet="Product_for_Agent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Material_Product_for_Agent" Association="Self.FK_Products_Material_Product_for_Agent">
+            <End Role="Product_for_Agent" EntitySet="Product_for_Agent" />
+            <End Role="Products_Material" EntitySet="Products_Material" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище PodgotovkaEGSModelContainer" CdmEntityContainer="PodgotovkaEGSEntities">
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="PodgotovkaEGSModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="Id_Material" ColumnName="Id_Material" />
+                <ScalarProperty Name="Name_Material" ColumnName="Name_Material" />
+                <ScalarProperty Name="Id_Type" ColumnName="Id_Type" />
+                <ScalarProperty Name="Count_of_Paskages" ColumnName="Count_of_Paskages" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Count_in_Stock" ColumnName="Count_in_Stock" />
+                <ScalarProperty Name="Minimum_possible_balance" ColumnName="Minimum_possible_balance" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product_for_Agent">
+            <EntityTypeMapping TypeName="PodgotovkaEGSModel.Product_for_Agent">
+              <MappingFragment StoreEntitySet="Product_for_Agent">
+                <ScalarProperty Name="IdArticul" ColumnName="IdArticul" />
+                <ScalarProperty Name="Name_Products" ColumnName="Name_Products" />
+                <ScalarProperty Name="Minimum_cost_for_Agent" ColumnName="Minimum_cost_for_Agent" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Id_TypeProduct" ColumnName="Id_TypeProduct" />
+                <ScalarProperty Name="Number_of_people_for_Production" ColumnName="Number_of_people_for_Production" />
+                <ScalarProperty Name="WorkShop_Number" ColumnName="WorkShop_Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products_Material">
+            <EntityTypeMapping TypeName="PodgotovkaEGSModel.Products_Material">
+              <MappingFragment StoreEntitySet="Products_Material">
+                <ScalarProperty Name="IdArticul" ColumnName="IdArticul" />
+                <ScalarProperty Name="Id_Material" ColumnName="Id_Material" />
+                <ScalarProperty Name="Required_amount_of_material" ColumnName="Required_amount_of_material" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="PodgotovkaEGSModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Type_Material">
+            <EntityTypeMapping TypeName="PodgotovkaEGSModel.Type_Material">
+              <MappingFragment StoreEntitySet="Type_Material">
+                <ScalarProperty Name="Id_typeMaterial" ColumnName="Id_typeMaterial" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeProduct">
+            <EntityTypeMapping TypeName="PodgotovkaEGSModel.TypeProduct">
+              <MappingFragment StoreEntitySet="TypeProduct">
+                <ScalarProperty Name="Id_Type" ColumnName="Id_Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
